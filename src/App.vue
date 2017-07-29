@@ -1,20 +1,24 @@
 <template>
   <div id="crypto-ticker">
     <div v-if="loading">
-      <span class="button is-dark">{{ loading_step }}</span>
+      <p>&nbsp;</p>
+      <p align="center">
+        <span class="button is-grey is-small is-loading"></span> {{ loading_step }}
+      </p>
     </div>
     <div v-else>
-      <input type="text" class="input" placeholder="Comision">
       <table class="table">
         <thead>
           <tr>
             <th>Moneda</th>
-            <!-- <th>BTC</th> -->
+            <!-- 
+            <th>BTC</th>
+            -->
             <th>USD</th>
           </tr>
         </thead>
         <tbody>
-          <tr v-for="coin in coins">
+          <tr v-for="coin in coins" :key="coin.coin" class="diff-rows" :class="{ 'diff-up': coin.btc_diff > 0 || coin.usd_diff > 0, 'diff-down': coin.btc_diff < 0 || coin.usd_diff < 0 }">
             <td>{{ coin.coin }}</td>
             <!--
             <td>{{ coin.btc_value | numbro(8) }} 
@@ -85,8 +89,6 @@ export default {
         this.updateCurrency(data);
       }
     })
-/*
-    */
 
   },
   methods:{
@@ -97,6 +99,8 @@ export default {
         for (let currencyPair in response.data) {
           let currencyArr = currencyPair.split('_');
           coins_obj[ currencyArr[1] ] = {
+            usd_diff: 0,
+            btc_diff: 0,
             coin: currencyArr[1]
           }
         }
@@ -137,16 +141,38 @@ export default {
     },
     updateCurrency(data){
       let curr = this.coins.filter( (coin) => coin.coin == data.currencyTo)[0];
-
+      if (!curr) {
+        return;  
+      }
+      let idx = this.coins.indexOf(curr);
       if (data.currencyFrom == 'USDT') {
+        curr.usd_diff = data.lowestAsk-curr.usd_value
+        if (curr.usd_diff > 0) {
+          curr.usd_diff = 1;
+        }else if (curr.usd_diff < 0){
+          curr.usd_diff = -1
+        }
+
         curr.usd_change = data.percentChange
         curr.usd_value = data.lowestAsk
       }else if (data.currencyFrom == 'BTC') {
+        curr.btc_diff = data.lowestAsk-curr.btc_value
+        if (curr.btc_diff > 0) {
+          curr.btc_diff = 1;
+        }else if (curr.btc_diff < 0){
+          curr.btc_diff = -1
+        }
+        
         curr.btc_change = data.percentChange
         curr.btc_value = data.lowestAsk
       }else{
         throw 'que carajo?'
       }
+
+      setTimeout(() => {
+        curr.usd_diff = 0;
+        curr.btc_diff = 0;
+      }, 500)
     },
   },
   data () {
@@ -168,7 +194,18 @@ export default {
 </style>
 <style scoped>
   @import '~bulma/css/bulma.css';
+    
+  .diff-rows{
+    transition: all .3s ease;
+  }
 
+  .diff-up{
+    background: rgba(127,255,127,.5);
+  }
+  .diff-down{
+    background: rgba(255,127,127,.5);
+  }
+  
   .negative{
     color: #A11B0A;
   }
