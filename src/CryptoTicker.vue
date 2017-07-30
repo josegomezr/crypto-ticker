@@ -10,20 +10,23 @@
       <table class="table">
         <thead>
           <tr>
-            <th>Moneda</th>
-            <!-- 
+            <th colspan="2">Moneda</th>
             <th>BTC</th>
+            <!-- 
             -->
             <th>USD</th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="coin in coins" :key="coin.coin" class="diff-rows" :class="{ 'diff-up': coin.btc_diff > 0 || coin.usd_diff > 0, 'diff-down': coin.btc_diff < 0 || coin.usd_diff < 0 }">
+            <td>
+              <i :class="'cc '+coin.coin"></i>
+            </td>
             <td>{{ coin.coin }}</td>
-            <!--
             <td>{{ coin.btc_value | numbro(8) }} 
               <span v-if="coin.coin != 'BTC'" :class="{'positive': coin.btc_change > 0, 'negative': coin.btc_change < 0, 'stalled': coin.btc_change == 0}">({{coin.btc_change | numbro(2) }}%)</span>
             </td>
+            <!--
             -->
             <td>{{ coin.usd_value | numbro(2) }} 
               <span :class="{'positive': coin.usd_change > 0, 'negative': coin.usd_change < 0, 'stalled': coin.usd_change == 0}">
@@ -52,7 +55,7 @@ import Q from 'q';
 import {$bus} from './event-bus'
 
 export default {
-  name: 'app',
+  name: 'crypto-ticker',
   filters: {
     numbro(input, decimalPlaces){
       decimalPlaces = decimalPlaces || 2;
@@ -63,6 +66,7 @@ export default {
     }
   },
   mounted(){
+
     this.loading_step = 'Conectando con Exchange';
     this.getBaseTicker();
 
@@ -125,6 +129,7 @@ export default {
             coins_obj[ currencyArr[1] ].btc_change = data.percentChange
             coins_obj[ currencyArr[1] ].btc_value = data.lowestAsk
           }else{
+            console.warn("Error Extraño *expedientes secretos X* (prefetch)");
             throw 'que carajo?'
           }
           
@@ -154,7 +159,7 @@ export default {
         }
 
         curr.usd_change = data.percentChange
-        curr.usd_value = data.lowestAsk
+        curr.usd_value = data.lowestAsk * (1+(this.fee/100))
       }else if (data.currencyFrom == 'BTC') {
         curr.btc_diff = data.lowestAsk-curr.btc_value
         if (curr.btc_diff > 0) {
@@ -164,8 +169,9 @@ export default {
         }
         
         curr.btc_change = data.percentChange
-        curr.btc_value = data.lowestAsk
+        curr.btc_value = data.lowestAsk * (1+(this.fee/100))
       }else{
+        console.warn("Error Extraño *expedientes secretos X* (live-reload)");
         throw 'que carajo?'
       }
 
@@ -176,22 +182,18 @@ export default {
     },
   },
   data () {
+    let defaults = Object.assign({}, this.$root.$options.extra)
     return {
       loading_step: 'Conectando...',
       coins: [],
       online: false,
-      acceptable_coins: window._COINS || ['BTC', 'XMR', 'LTC', 'ETH'],
-      btc_cost: 0.00,
+      acceptable_coins: defaults.coins,
+      fee: defaults.fee,
       loading: true
     }
   }
 }
 </script>
-<style>
-  #crypto-ticker{
-    width: 300px;
-  }
-</style>
 <style scoped>
   @import '~bulma/css/bulma.css';
     

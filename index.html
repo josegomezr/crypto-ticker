@@ -6,6 +6,24 @@
   </head>
   <body>
     <div id="app"></div>
-    <script src="/dist/build.js"></script>
+    <!--
+    <script src="/dist/crypto_ticker-build.js"></script>
+    <script>
+      window.CryptoTicker.init({
+        entry: '#app',
+        coins: ['BTC', 'XMR', 'LTC', 'DASH', 'NXT', 'STR', 'XRP', 'ETH'],
+        fee: 0
+      })
+    </script>
+    -->
+    <script src="/dist/btc_calculator-build.js"></script>
+    <script>
+      window.BTCCalculator.init({
+        entry: '#app',
+        fee: 0
+      })
+    </script>
+    <!--
+    -->
   </body>
 </html>
