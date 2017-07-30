@@ -7,13 +7,100 @@
       </p>
     </div>
     <div v-else>
-      <div class="field">
-        <label for="BTC" class="label">Indique la cantidad de BTC que desea vender</label>
-        <input type="text" class="input" @input="to_pen" @change="to_pen" v-model="model.btc" />
+      <p class="has-text-centered">
+      <strong>
+        Indique la cantidad de BTC que desea vender
+      </strong>
+      </p>
+      <div class="field is-grouped is-grouped-centered">
+        <div class="control">
+          <div class="field has-addons">
+            <div class="control">
+              <span class="button has-icon is-info">
+                <i class="fa fa-bitcoin"></i>
+              </span>
+            </div>
+            <div class="control">
+              <input type="text" @click="$event.target.select()" class="input" @input="to_pen" @change="to_pen" v-model="model.btc" />
+            </div>
+          </div>
+        </div>
       </div>
-      <p v-if="model.btc > 0">Debe depositar S/. {{ model.pen }} ó $ {{ total_usd | numbro(2) }}</p>
-      <p v-else>&nbsp;</p>
-      Puede comprar 1 BTC por S/. {{ one_btc_pen | numbro(2) }} ó ${{ one_btc_usd | numbro(2) }}
+      <div v-if="model.btc > 0">
+        <p class="has-text-centered">Debe depositar</p>
+        <div class="field is-grouped is-grouped-centered">
+          <div class="control">
+            <div class="field has-addons">
+              <div class="control">
+                <span class="button has-icon is-success is-coin-addon">
+                  <i class="fa fa-usd"></i>
+                </span>
+              </div>
+              <div class="control">
+                <strong class="input coin-total">{{ total_usd | numbro(2) }}</strong>
+              </div>
+            </div>
+          </div>
+          <div class="control">
+            <div class="field has-addons">
+              <div class="control">
+                <span class="button has-icon is-primary is-coin-addon">
+                  S/.
+                </span>
+              </div>
+              <div class="control">
+                <strong class="input coin-total">{{ model.pen }}</strong>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
+      <br>
+      <div class="field is-grouped is-grouped-centered tarifario">
+        <div class="control">
+          <div class="field has-addons">
+            <p class="tarifario-part control">
+              <strong disabled class="tarifario-segment input">1</strong>
+            </p>
+            <p class="tarifario-part control">
+              <span class="button tarifario-segment has-icon is-info">
+                <i class="fa fa-bitcoin"></i>
+              </span>
+            </p>
+            <p class="tarifario-part control">
+              <span class="button tarifario-segment has-icon">
+                =
+              </span>
+            </p>
+            <p class="tarifario-part control">
+              <span class="button tarifario-segment has-icon is-success">
+                $
+              </span>
+            </p>
+            <p class="tarifario-part control">
+              <strong class="input tarifario-segment" disabled>
+                {{ one_btc_usd | numbro(2) }}
+              </strong>
+            </p>
+            <p class="tarifario-part control">
+              <span class="button tarifario-segment has-icon">
+                =
+              </span>
+            </p>
+            <p class="tarifario-part control">
+              <span class="button tarifario-segment has-icon is-primary">
+                S/.
+              </span>
+            </p>
+            <p class="tarifario-part control">
+              <strong class="input tarifario-segment" disabled>
+                {{ one_btc_pen | numbro(2) }}
+              </strong>
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +130,7 @@ export default {
     $bus.$on('bitfinex-open', () => {
       this.online = true;
     })
+
     $bus.$on('bitfinex-close', () => {
       this.online = false;
     })
@@ -104,27 +192,32 @@ export default {
 </script>
 <style>
   #btc-calculator{
-    width:300px;
+    width:450px;
   }
 </style>
 <style scoped>
   @import '~bulma/css/bulma.css';
-    
-  .diff-rows{
-    transition: all .3s ease;
+  @import '~font-awesome/css/font-awesome.min.css';
+
+  .is-coin-addon{
+    width: 50px;
   }
 
-  .diff-up{
-    background: rgba(127,255,127,.5);
+  .coin-total{
+    width: 90px;
   }
-  .diff-down{
-    background: rgba(255,127,127,.5);
+  .tarifario .tarifario-segment{
+    border-top: 1px solid #b5b5b5;
+    border-bottom: 1px solid #b5b5b5;
   }
-  
-  .negative{
-    color: #A11B0A;
+
+  .tarifario .tarifario-part:first-child .tarifario-segment{
+    border-left: 1px solid #b5b5b5;
   }
-  .positive{
-    color: #3d9400;
+  .tarifario .tarifario-part:last-child .tarifario-segment{
+    border-right: 1px solid #b5b5b5;
+  }
+  .tarifario [disabled]{
+    background: inherit;
   }
 </style>
