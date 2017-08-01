@@ -49,9 +49,8 @@ function poloniex_url(coin) {
   return `${POLONIEX_URL}&currencyPair=BTC_${coin}&start=${start}`
 }
 
-import axios from 'axios';
+import $ from 'jquery';
 import numbro from 'numbro';
-import Q from 'q';
 import {$bus} from './event-bus'
 
 export default {
@@ -97,10 +96,10 @@ export default {
   },
   methods:{
     getBaseTicker(){
-      axios.get('https://poloniex.com/public?command=returnTicker').then((response) => {
+      $.getJSON('https://poloniex.com/public?command=returnTicker').then((data) => {
         this.loading_step = 'Analizando datos';
         var coins_obj = {};
-        for (let currencyPair in response.data) {
+        for (let currencyPair in data) {
           let currencyArr = currencyPair.split('_');
           coins_obj[ currencyArr[1] ] = {
             usd_diff: 0,
@@ -109,7 +108,7 @@ export default {
           }
         }
 
-        for (let currencyPair in response.data) {
+        for (let currencyPair in data) {
           let currencyArr = currencyPair.split('_');
           if ( ['USDT', 'BTC'].indexOf(currencyArr[0]) < 0 ) {
             continue;
@@ -119,7 +118,7 @@ export default {
             continue;
           }
 
-          let data = response.data[currencyPair];
+          let data = data[currencyPair];
           let key = 'usd_value';
 
           if (currencyArr[0] == 'USDT') {
@@ -195,7 +194,12 @@ export default {
 }
 </script>
 <style scoped>
+  /*
   @import '~bulma/css/bulma.css';
+  */
+  .button{
+    margin: 0;
+  }
     
   .diff-rows{
     transition: all .3s ease;

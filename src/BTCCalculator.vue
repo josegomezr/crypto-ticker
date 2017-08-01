@@ -75,7 +75,7 @@
             </p>
             <p class="tarifario-part control">
               <span class="button tarifario-segment has-icon is-success">
-                $
+                <i class="fa fa-usd"></i>
               </span>
             </p>
             <p class="tarifario-part control">
@@ -106,9 +106,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+import $ from 'jquery';
 import numbro from 'numbro';
-import {$bus} from './event-bus'
 
 export default {
   name: 'btc-calculator',
@@ -124,21 +123,8 @@ export default {
   mounted(){
     this.loading_step = 'Conectando con Exchange';
     this.loading = false;
-    return;
+
     this.getBaseTicker();
-
-    $bus.$on('bitfinex-open', () => {
-      this.online = true;
-    })
-
-    $bus.$on('bitfinex-close', () => {
-      this.online = false;
-    })
-
-    $bus.$on('bitfinex-ticker-USDT', (data) => {
-    })
-    $bus.$on('bitfinex-ticker-BTC', (data) => {
-    })
   },
   computed:{
     btc_with_fee(){
@@ -164,9 +150,9 @@ export default {
       this.model.btc = numbro(total).format(',0.00000000');
     },
     getBaseTicker(){
-      axios.get('http://api.bitven.com/prices').then((response) => {
+      $.getJSON('http://api.bitven.com/prices').success((data) => {
         this.loading_step = 'Analizando datos';
-        this.btc_price = numbro(response.data.BTC_TO_USD_RATE).value()
+        this.btc_price = numbro(data.BTC_TO_USD_RATE).value()
         this.loading = false;
       })
     },
@@ -184,7 +170,7 @@ export default {
       btc_price: 2534.56,
       usd_pen: 3.22,
       online: false,
-      fee: 10, //defaults.fee,
+      fee: defaults.fee,
       loading: true
     }
   }
@@ -196,15 +182,17 @@ export default {
   }
 </style>
 <style scoped>
+  /*
   @import '~bulma/css/bulma.css';
   @import '~font-awesome/css/font-awesome.min.css';
+  */
 
   .is-coin-addon{
     width: 50px;
   }
 
   .coin-total{
-    width: 90px;
+    min-width: 90px;
   }
   .tarifario .tarifario-segment{
     border-top: 1px solid #b5b5b5;
@@ -219,5 +207,9 @@ export default {
   }
   .tarifario [disabled]{
     background: inherit;
+  }
+
+  .button{
+    margin: 0 !important;
   }
 </style>

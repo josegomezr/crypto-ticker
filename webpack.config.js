@@ -35,45 +35,42 @@ module.exports = {
         test: /\.(png|jpg|gif|svg)$/,
         loader: 'file-loader',
         options: {
-          name: '[name].[ext]?[hash]'
+          name: '[name].[ext]'
         }
       },{
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?&mimetype=application/font-woff"
-      }, {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?&mimetype=application/font-woff"
-      }, {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?&mimetype=application/octet-stream"
-      }, {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "file-loader"
-      }, {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: "url-loader?&mimetype=image/svg+xml"
+        test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
+        /*
+        loader: "url-loader?mimetype=application/font-woff"
+        */
+        loader: "file-loader",
+        options: {
+          name: '[name].[ext]'
+        }
       }
     ]
   },
   resolve: {
     alias: {
-      'vue$': 'vue/dist/vue.esm.js'
+      'vue$': 'vue/dist/vue.runtime.esm.js'
     }
   },
   devServer: {
-    historyApiFallback: true,
-    noInfo: true
+    historyApiFallback: true
   },
   performance: {
-    hints: false
+    hints: "warning"
+  },
+  externals:{
+    "jquery": "jQuery",
   },
   devtool: '#eval-source-map',
   plugins: [new webpack.NamedModulesPlugin(),]
 }
 
 if (process.env.NODE_ENV === 'production') {
-  module.exports.devtool = '#source-map'
-  module.exports.resolve.alias['vue$'] = 'vue/dist/vue.runtime.esm.js'
+  module.exports.devtool = false;
+  module.exports.resolve.alias['vue$'] = 'vue/dist/vue.runtime.min.js'
+  module.exports.resolve.alias['numbro$'] = 'numbro/dist/numbro.min.js'
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = ([
     new webpack.DefinePlugin({
