@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div id="btc-calculator">
     <div v-if="loading">
       <p>&nbsp;</p>
@@ -7,98 +7,70 @@
       </p>
     </div>
     <div v-else>
-      <p class="has-text-centered">
-      <strong>
-        Indique la cantidad de BTC que desea vender
-      </strong>
-      </p>
-      <div class="field is-grouped is-grouped-centered">
-        <div class="control">
-          <div class="field has-addons">
-            <div class="control">
-              <span class="button has-icon is-info">
-                <i class="fa fa-bitcoin"></i>
-              </span>
-            </div>
-            <div class="control">
-              <input type="text" @click="$event.target.select()" class="input" @input="to_pen" @change="to_pen" v-model="model.btc" />
-            </div>
+      <div class="form-group">
+        <div class="input-group">
+          <div class="input-group-btn">
+            <span class="btn btn-primary">
+              <i class="fa fa-bitcoin"></i>
+            </span>
           </div>
+          <input type="text" @click="$event.target.select()" class="form-control" @input="to_pen" @change="to_pen" v-model="model.btc" />
         </div>
       </div>
+
       <div v-if="model.btc > 0">
-        <p class="has-text-centered">Debe depositar</p>
-        <div class="field is-grouped is-grouped-centered">
-          <div class="control">
-            <div class="field has-addons">
-              <div class="control">
-                <span class="button has-icon is-success is-coin-addon">
-                  <i class="fa fa-usd"></i>
+        <p class="text-center">Debe depositar</p>
+        <div class="row clearfix">
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <span class="btn btn-success">
+                    <i class="fa fa-usd"></i>
+                  </span>
                 </span>
-              </div>
-              <div class="control">
-                <strong class="input coin-total">{{ total_usd | numbro(2) }}</strong>
+                <strong class="form-control" disabled>{{ total_usd | numbro(2) }}</strong>
               </div>
             </div>
           </div>
-          <div class="control">
-            <div class="field has-addons">
-              <div class="control">
-                <span class="button has-icon is-primary is-coin-addon">
-                  S/.
+          <div class="col-xs-12 col-sm-6">
+            <div class="form-group">
+              <div class="input-group">
+                <span class="input-group-btn">
+                  <span class="btn btn-info">
+                    S/.
+                  </span>
                 </span>
-              </div>
-              <div class="control">
-                <strong class="input coin-total">{{ model.pen }}</strong>
+                <strong class="form-control" disabled>{{ model.pen }}</strong>
               </div>
             </div>
           </div>
-          
         </div>
       </div>
       <br>
-      <div class="field is-grouped is-grouped-centered tarifario">
-        <div class="control">
-          <div class="field has-addons">
-            <p class="tarifario-part control">
-              <strong disabled class="tarifario-segment input">1</strong>
-            </p>
-            <p class="tarifario-part control">
-              <span class="button tarifario-segment has-icon is-info">
-                <i class="fa fa-bitcoin"></i>
-              </span>
-            </p>
-            <p class="tarifario-part control">
-              <span class="button tarifario-segment has-icon">
-                =
-              </span>
-            </p>
-            <p class="tarifario-part control">
-              <span class="button tarifario-segment has-icon is-success">
-                <i class="fa fa-usd"></i>
-              </span>
-            </p>
-            <p class="tarifario-part control">
-              <strong class="input tarifario-segment" disabled>
-                {{ one_btc_usd | numbro(2) }}
-              </strong>
-            </p>
-            <p class="tarifario-part control">
-              <span class="button tarifario-segment has-icon">
-                =
-              </span>
-            </p>
-            <p class="tarifario-part control">
-              <span class="button tarifario-segment has-icon is-primary">
-                S/.
-              </span>
-            </p>
-            <p class="tarifario-part control">
-              <strong class="input tarifario-segment" disabled>
-                {{ one_btc_pen | numbro(2) }}
-              </strong>
-            </p>
-          </div>
+      <div class="form-group">
+        <div class="input-group">
+          <span class="input-group-btn">
+            <span class="btn btn-primary">
+              <i class="fa fa-bitcoin"></i>
+            </span>
+          </span>
+          <strong class="input-group-addon">1</strong>
+          <span class="input-group-addon">=</span>
+          <span class="input-group-btn">
+            <span class="btn btn-success">
+              <i class="fa fa-usd"></i>
+            </span>
+          </span>
+
+          <strong class="form-control">{{ one_btc_usd | numbro(2) }}</strong>
+          <span class="input-group-addon">=</span>
+          <span class="input-group-btn">
+            <span class="btn btn-info">
+              S/.
+            </span>
+          </span>
+          <strong class="form-control">{{ one_btc_pen | numbro(2) }}</strong>
         </div>
       </div>
     </div>
@@ -176,17 +148,45 @@ export default {
   }
 }
 </script>
-<style>
-  #btc-calculator{
-    width:450px;
-  }
-</style>
 <style scoped>
-  /*
-  @import '~bulma/css/bulma.css';
-  @import '~font-awesome/css/font-awesome.min.css';
-  */
+  /*@import '~bootstrap/dist/css/bootstrap.min.css';*/
+  /*@import '~font-awesome/css/font-awesome.min.css';*/
+  
 
+  .form-group .input-group-btn .btn{
+    border-radius: 0;
+  }
+
+  .form-group .form-control{
+    border-right: 0;
+  }
+  
+  .form-group .form-control:last-child{
+    border-right: 1px solid rgb(204, 204, 204);
+  }
+  .form-group .form-control{
+    border-left: 0;
+  }
+  
+  .form-group .form-control:last-child{
+    border-left: 1px solid rgb(204, 204, 204);
+  }
+
+  .form-group .input-group-addon+.input-group-addon{
+    border-left: 0;
+  }
+
+  .form-group .input-group-btn:first-child .btn{
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
+  }
+  .form-group .input-group-btn:last-child .btn{
+    border-top-right-radius: 4px;
+    border-bottom-right-radius: 4px;
+  }
+  .form-group .form-control:last-child{
+    margin-left: -1px;
+  }
   .is-coin-addon{
     width: 50px;
   }

@@ -40,7 +40,7 @@ module.exports = {
       },{
         test: /\.(woff(2)?|ttf|eot|svg)(\?v=\d+\.\d+\.\d+)?$/,
         /*
-        loader: "url-loader?mimetype=application/font-woff"
+          loader: "url-loader?mimetype=application/font-woff"
         */
         loader: "file-loader",
         options: {
@@ -60,9 +60,7 @@ module.exports = {
   performance: {
     hints: "warning"
   },
-  externals:{
-    "jquery": "jQuery",
-  },
+  externals: {},
   devtool: '#eval-source-map',
   plugins: [new webpack.NamedModulesPlugin(),]
 }
@@ -71,6 +69,8 @@ if (process.env.NODE_ENV === 'production') {
   module.exports.devtool = false;
   module.exports.resolve.alias['vue$'] = 'vue/dist/vue.runtime.min.js'
   module.exports.resolve.alias['numbro$'] = 'numbro/dist/numbro.min.js'
+  module.exports.externals['jquery'] = 'jQuery';
+  module.exports.externals['font-awesome'] = 'font-awesome';
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = ([
     new webpack.DefinePlugin({
@@ -78,6 +78,7 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
+    new webpack.IgnorePlugin(/bootstrap/, /font\-awesome/),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),

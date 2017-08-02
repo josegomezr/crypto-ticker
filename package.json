@@ -11,6 +11,7 @@
   "dependencies": {
     "autobahn": "^17.5.2",
     "axios": "^0.16.2",
+    "bootstrap": "^3.3.7",
     "bulma": "^0.4.4",
     "font-awesome": "^4.7.0",
     "jquery": "^3.2.1",
@@ -27,7 +28,7 @@
     "css-loader": "^0.25.0",
     "file-loader": "^0.9.0",
     "style-loader": "^0.18.2",
-    "uglify-es": "^3.0.26",
+    "uglify-es": "^3.0.27",
     "uglifyjs-webpack-plugin": "^0.4.6",
     "url-loader": "^0.5.9",
     "vue-loader": "^12.1.0",
