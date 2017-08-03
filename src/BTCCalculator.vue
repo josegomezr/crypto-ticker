@@ -7,68 +7,57 @@
       </p>
     </div>
     <div v-else>
+      <p v-if="message_header">{{ message_header }}</p>
       <div class="form-group">
         <div class="input-group">
-          <div class="input-group-btn">
-            <span class="btn btn-primary">
-              <i class="fa fa-bitcoin"></i>
-            </span>
+          <div class="input-group-addon addon-btc">
+            <i class="tarifario-icon fa fa-bitcoin"></i>
           </div>
           <input type="text" @click="$event.target.select()" class="form-control" @input="to_pen" @change="to_pen" v-model="model.btc" />
         </div>
       </div>
 
-      <div v-if="model.btc > 0">
-        <p class="text-center">Debe depositar</p>
+      <div>
+        <p v-if="message_result">{{ message_result }}</p>
         <div class="row clearfix">
           <div class="col-xs-12 col-sm-6">
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-btn">
-                  <span class="btn btn-success">
-                    <i class="fa fa-usd"></i>
-                  </span>
+                <span class="input-group-addon addon-usd">
+                  <i class="tarifario-icon fa fa-usd"></i>
                 </span>
-                <strong class="form-control" disabled>{{ total_usd | numbro(2) }}</strong>
+                <strong class="form-control">{{ total_usd | numbro(2) }}</strong>
               </div>
             </div>
           </div>
           <div class="col-xs-12 col-sm-6">
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-btn">
-                  <span class="btn btn-info">
-                    S/.
-                  </span>
+                <span class="input-group-addon addon-pen">
+                  S/.
                 </span>
-                <strong class="form-control" disabled>{{ model.pen }}</strong>
+                <strong class="form-control">{{ model.pen }}</strong>
               </div>
             </div>
           </div>
         </div>
       </div>
       <br>
-      <div class="form-group">
+      <div class="form-group tarifario" v-if="!hide_tarifario">
         <div class="input-group">
-          <span class="input-group-btn">
-            <span class="btn btn-primary">
-              <i class="fa fa-bitcoin"></i>
-            </span>
+          <span class="input-group-addon addon-btc">
+            <i class="tarifario-icon fa fa-bitcoin"></i>
           </span>
-          <strong class="input-group-addon">1</strong>
+          <strong class="form-control">1</strong>
           <span class="input-group-addon">=</span>
-          <span class="input-group-btn">
-            <span class="btn btn-success">
-              <i class="fa fa-usd"></i>
-            </span>
+          <span class="input-group-addon addon-usd">
+            <i class="tarifario-icon fa fa-usd"></i>
           </span>
 
           <strong class="form-control">{{ one_btc_usd | numbro(2) }}</strong>
           <span class="input-group-addon">=</span>
-          <span class="input-group-btn">
-            <span class="btn btn-info">
-              S/.
-            </span>
+          <span class="input-group-addon addon-pen">
+            S/.
           </span>
           <strong class="form-control">{{ one_btc_pen | numbro(2) }}</strong>
         </div>
@@ -143,73 +132,83 @@ export default {
       usd_pen: 3.22,
       online: false,
       fee: defaults.fee,
+      message_header: defaults.message_header,
+      message_result: defaults.message_result,
+      hide_tarifario: defaults.hide_tarifario,
+      operation: defaults.operation,
       loading: true
     }
   }
 }
 </script>
-<style scoped>
-  /*@import '~bootstrap/dist/css/bootstrap.min.css';*/
-  /*@import '~font-awesome/css/font-awesome.min.css';*/
+<style scoped>  
   
-
-  .form-group .input-group-btn .btn{
+  .tarifario .input-group-btn .btn{
     border-radius: 0;
   }
 
-  .form-group .form-control{
+  .tarifario .form-control{
     border-right: 0;
   }
   
-  .form-group .form-control:last-child{
+  .tarifario .form-control:last-child{
     border-right: 1px solid rgb(204, 204, 204);
   }
-  .form-group .form-control{
+  .tarifario .form-control{
     border-left: 0;
   }
   
-  .form-group .form-control:last-child{
+  .tarifario .form-control:last-child{
     border-left: 1px solid rgb(204, 204, 204);
   }
 
-  .form-group .input-group-addon+.input-group-addon{
+  .tarifario .input-group-addon+.input-group-addon{
     border-left: 0;
   }
 
-  .form-group .input-group-btn:first-child .btn{
+  .tarifario .input-group-btn:first-child .btn{
     border-top-left-radius: 4px;
     border-bottom-left-radius: 4px;
   }
-  .form-group .input-group-btn:last-child .btn{
+  .tarifario .input-group-btn:last-child .btn{
     border-top-right-radius: 4px;
     border-bottom-right-radius: 4px;
   }
-  .form-group .form-control:last-child{
+
+  .tarifario .form-control:last-child{
     margin-left: -1px;
   }
-  .is-coin-addon{
-    width: 50px;
+
+  .tarifario-icon{
+    font-size: 19px;
   }
 
-  .coin-total{
-    min-width: 90px;
-  }
-  .tarifario .tarifario-segment{
-    border-top: 1px solid #b5b5b5;
-    border-bottom: 1px solid #b5b5b5;
+  .addon-usd{
+    color: #fff;
+    background-color: #5cb85c;
+    border-color: #4cae4c;
   }
 
-  .tarifario .tarifario-part:first-child .tarifario-segment{
-    border-left: 1px solid #b5b5b5;
-  }
-  .tarifario .tarifario-part:last-child .tarifario-segment{
-    border-right: 1px solid #b5b5b5;
-  }
-  .tarifario [disabled]{
-    background: inherit;
+  .addon-btc{
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
   }
 
+  .addon-pen{
+    color: #fff;
+    background-color: #31b0d5;
+    border-color: #269abc;
+  }
+  
   .button{
     margin: 0 !important;
+  }
+
+  @media (max-width: 768px){
+    .tarifario .input-group-addon,
+    .tarifario .form-control{
+      padding: 6px; 
+    }
   }
 </style>

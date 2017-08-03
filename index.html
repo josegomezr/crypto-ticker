@@ -2,10 +2,19 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>crypto-ticker</title>
+    <link rel="stylesheet" href="/node_modules/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="/node_modules/font-awesome/css/font-awesome.min.css" />
   </head>
   <body>
-    <div id="app"></div>
+    <div class="container">
+      <div class="row clearfix">
+        <div class="col-md-9">
+          <div id="app"></div>
+        </div>
+      </div>
+    </div>
     <!--
     <script src="/dist/crypto_ticker-build.js"></script>
     <script>
@@ -17,10 +26,14 @@
     </script>
     -->
     <script src="/dist/btc_calculator-build.js"></script>
+    
     <script>
       window.BTCCalculator.init({
         entry: '#app',
-        fee: 0
+        fee: 0,
+        message_header: 'Ingrese la cantidad de BTC que desea vender:',
+        message_result: 'Usted Recibirá:',
+        hide_tarifario: false,
       })
     </script>
     <!--

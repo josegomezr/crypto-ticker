@@ -19,7 +19,6 @@ module.exports = {
         options: {
           loaders: {
           }
-          // other vue-loader options go here
         }
       },
       {
@@ -29,7 +28,10 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        loader: 'css-loader'
+        loader: 'css-loader',
+        options: {
+          import: process.env.NODE_ENV !== 'production'
+        },
       },
       {
         test: /\.(png|jpg|gif|svg)$/,
@@ -58,7 +60,7 @@ module.exports = {
     historyApiFallback: true
   },
   performance: {
-    hints: "warning"
+    hints: false, // "warning"
   },
   externals: {},
   devtool: '#eval-source-map',
@@ -70,7 +72,6 @@ if (process.env.NODE_ENV === 'production') {
   module.exports.resolve.alias['vue$'] = 'vue/dist/vue.runtime.min.js'
   module.exports.resolve.alias['numbro$'] = 'numbro/dist/numbro.min.js'
   module.exports.externals['jquery'] = 'jQuery';
-  module.exports.externals['font-awesome'] = 'font-awesome';
   // http://vue-loader.vuejs.org/en/workflow/production.html
   module.exports.plugins = ([
     new webpack.DefinePlugin({
@@ -78,7 +79,6 @@ if (process.env.NODE_ENV === 'production') {
         NODE_ENV: '"production"'
       }
     }),
-    new webpack.IgnorePlugin(/bootstrap/, /font\-awesome/),
     new webpack.LoaderOptionsPlugin({
       minimize: true
     }),
